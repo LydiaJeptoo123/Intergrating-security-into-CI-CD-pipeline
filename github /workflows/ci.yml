@@ -1,0 +1,27 @@
+name CI pipeline
+
+on: 
+push: 
+ branches: [main]
+pull_request:
+ branches: [main]
+
+jobs: 
+ build-test:
+  runs-on: Ubuntu_latest
+
+  steps:
+   - name:Checkout code
+     uses: actions/checkout@v3
+
+    -name:Set up python
+    uses: action/setup-checkout@v4
+    with:
+      python-version : "3.10"
+
+   -name : Install dependencies
+   run: pip install -r requirements.txt
+
+   -name :Run tests
+   run:pystest
+     
