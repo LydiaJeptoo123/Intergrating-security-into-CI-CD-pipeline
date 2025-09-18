@@ -23,5 +23,34 @@ jobs:
    run: pip install -r requirements.txt
 
    -name: Run tests
-   run: pystest
-     
+   run: pytest 
+
+   - name: Run Bandit (SAST)
+     run: pip install bandit && bandit -r .
+
+   - name: Dependency Scan with Snyk
+     uses: snyk/actions/python@master
+     env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+    - name: Secret Scanning with Trufflehog
+      uses: trufflesecurity/trufflehog@v3.57.0
+        with:
+          path: .
+          output: results.json
+          json: true
+          
+#Deployment with DockerHub
+     - name: Log in to DockerHub
+        if: success()
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.Kellytheprorammer}}
+          password: ${{secrets.kelylydia_001}}
+
+      - name: Build Docker image
+        if: success()
+        run: docker build -t ${{secrets.Kellytheprorammer}}/myapp:latest .
+
+      - name: Push Docker image
+        if: success()     
