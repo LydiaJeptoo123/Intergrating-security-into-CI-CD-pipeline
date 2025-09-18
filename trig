@@ -1,0 +1,4 @@
+echo "#My secure CI/CD pipeline test" > README.md
+git add README.md
+git commit -m "Trigger pipeline with README update"
+git push origin main
